@@ -1,16 +1,17 @@
+from datetime import datetime
 from enum import Enum
 from typing import List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field, conint, conlist, field_validator
 
-class Size(str, Enum):
+class Size(Enum):
     small = 'small'
     medium = 'medium'
     big = 'big'
 
 
-class Status(str, Enum):
+class Status(Enum):
     created = 'created'
     processed = 'processed'
     cancelled = 'cancelled'
@@ -31,5 +32,13 @@ class OrderItemSchema(BaseModel):
 class CreateOrderSchema(BaseModel):
     order: conlist(OrderItemSchema, min_length=1)
 
+
 class GetOrderSchema(BaseModel):
-    orders: List[OrderItemSchema]
+    id: UUID
+    created: datetime
+    status: Status
+    order: List[OrderItemSchema]  # возвращаем состав заказа
+
+
+class GetOrdersSchema(BaseModel):
+    orders: List[GetOrderSchema]
