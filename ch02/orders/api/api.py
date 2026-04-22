@@ -1,6 +1,10 @@
-import uuid
+# Активация виртуального окружения:
+# source /Users/ovsyannikov.89gmail.com/.local/share/virtualenvs/api-na9bOiH-/bin/activate
+
+
 from datetime import datetime
-from uuid import UUID
+from uuid import UUID, uuid4
+from typing import Optional
 
 from fastapi import HTTPException
 from starlette.responses import Response
@@ -8,6 +12,7 @@ from starlette import status
 
 from ch02.orders.app import app
 from ch02.orders.api.schemas import CreateOrderSchema, GetOrdersSchema, GetOrderSchema
+
 
 ORDERS = []
 order = {
@@ -22,11 +27,32 @@ order = {
 }
 
 @app.get("/orders", response_model=GetOrdersSchema)
-def get_orders():
+def get_orders(cancelled: Optional[bool]=None,
+               limit: Optional[int]=None):
+    """
+    Получение всех заказов.
+    Добавление необязательных параметров запроса cancelled и limit для фильтрации.
+    cancelled - фильтрует по отмененным заказам, limit - отображает количество товаров на одной странице.
+    """
 
     if ORDERS:
         print('Заказы', ORDERS)
-        return {'orders': ORDERS}
+        if cancelled is None and limit is None:
+            return {'orders': ORDERS}
+        query_set = [ord for ord in ORDERS]
+
+        if cancelled:
+            # Фильтр по отмененным заказам
+            query_set = [ord for ord in query_set if ord['status'] == 'cancelled']
+        else:
+            # Фильтр по неотмененным заказам
+            query_set = [ord for ord in query_set if ord['status'] != 'cancelled']
+
+        if limit and len(query_set) > limit:
+            return {'orders': query_set[:limit]}
+    
+        return {'orders': query_set}
+        
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Список заказов пуст')
 
 
@@ -36,7 +62,7 @@ def get_orders():
 )
 def create_order(order_details: CreateOrderSchema):
     order = order_details.dict()
-    order['id'] = uuid.uuid4()
+    order['id'] = uuid4()
     order['created'] = datetime.now()
     order['status'] = 'created'
     ORDERS.append(order)
@@ -84,6 +110,7 @@ def cancel_order(order_id: UUID):
             order['status'] = 'cancelled'
             return order
     raise HTTPException(status_code=404, detail="Order not found")
+
 
 @app.post("/orders/{order_id}/pay")
 def pay_order(order_id: UUID):

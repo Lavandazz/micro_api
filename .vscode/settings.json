@@ -1,0 +1,107 @@
+{
+  "git.autoRepositoryDetection": "subFolders",
+  "breadcrumbs.enabled": true,
+
+  "python.languageServer": "Pylance",
+  "python.analysis.autoSearchPaths": true,
+  "python.analysis.inlayHints.variableTypes": true,
+  "python.analysis.inlayHints.functionReturnTypes": true,
+  "python.analysis.importFormat": "absolute",
+  "python.analysis.enablePytestSupport": true,
+  "python.analysis.indexing": true,
+  "python.analysis.packageIndexDepths": [
+    {
+      "name": "django",
+      "depth": 3,
+      "includeAllSymbols": true
+    }
+  ],
+  // Настройка пути PATH
+  "terminal.integrated.env.osx": {
+        "PYTHONPATH": "${workspaceFolder}"
+    },
+    "python.envFile": "${workspaceFolder}/.env",
+
+  // Настройки Code Runner
+  "code-runner.runInTerminal": true,
+  "code-runner.clearPreviousOutput": true,
+  "code-runner.saveFileBeforeRun": true,
+  "code-runner.executorMap": {
+    "python": "cd $dir && source venv/bin/activate && export $(cat .env | xargs) && python manage.py runserver"
+  },
+  // ========== ДОБАВЛЕНО ДЛЯ ПРИБЛИЖЕНИЯ К PYCHARM ==========
+
+  // 1. Автоматическое добавление импортов (как в PyCharm)
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.completeFunctionParens": true,
+
+  // 2. Показывать предложения даже без нажатия Ctrl+Space
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": true
+  },
+  "editor.suggestOnTriggerCharacters": true,
+  "editor.acceptSuggestionOnCommitCharacter": true,
+  "editor.tabCompletion": "on",
+
+  // 3. Подсветка ошибок на лету (как в PyCharm)
+  "python.analysis.diagnosticMode": "openFilesOnly", // Было "openFilesOnly", теперь проверяет весь проект
+  "python.analysis.typeCheckingMode": "off", // Было "off", теперь basic проверка типов
+
+  // 4. Показывать документацию при наведении
+  "editor.hover.enabled": "on",
+  "editor.parameterHints.enabled": true,
+
+  // 5. Рефакторинг (как в PyCharm)
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+    "source.fixAll": "explicit"
+  },
+
+  // ========== ОСТАЛЬНЫЕ НАСТРОЙКИ ==========
+
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+
+  "emmet.includeLanguages": {
+    "django-html": "html",
+    "html": "html"
+  },
+
+  "files.associations": {
+    "**/*.html": "html",
+    "**/templates/**/*.html": "django-html",
+    "**/templates/*.html": "django-html",
+    "**/requirements*.{txt,in}": "pip-requirements"
+  },
+
+  "[django-html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": true,
+      "strings": true
+    },
+    "editor.tabSize": 2,
+    "breadcrumbs.showClasses": true
+  },
+
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2
+  },
+
+  "prettier.documentSelectors": ["**/*.html"],
+  "prettier.htmlWhitespaceSensitivity": "ignore",
+
+  "django.snippets.exclude": ["cms", "wagtail"],
+  "python-envs.defaultEnvManager": "ms-python.python:pipenv"
+}
