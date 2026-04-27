@@ -3,6 +3,7 @@
 В файле ch02/kitchen/oas.yaml описаны схемы для планирования заказа ScheduleOrderSchema, 
 для предоставления сведений о запланированном заказе - GetScheduledOrderSchema,
 и представление о товаре в заказе OrderItemSchema.
+
 Запуск Flask осуществляется с помощью команды flask run или flask run --debug
 В файле ch02/kitchen/api/schemas.py определяются схемы с помощью моделей marshmallow.
 """

@@ -14,6 +14,10 @@ servers:
     description: staging server for testing purposes only
 
 paths:
+# schedules принимает 3 параметра заказа
+# progress указывает статус заказа
+# limit ограничивает кол-во резулттатов на странице
+# since дата/время
   /kitchen/schedules:
     get:
       summary: Returns a list of orders scheduled for production
