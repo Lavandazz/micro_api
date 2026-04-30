@@ -1,3 +1,19 @@
+# Python и Django
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.Python
 .env
+*.log
+
+# Виртуальное окружение
+venv/
+.venv
+
+# Редакторы кода и IDE
+.vscode/
+.idea/
+
+# Другие файлы
+my.py

@@ -1,5 +1,5 @@
 """
-Реализация роутов для планирования заказов с помощью Flask, marshmallow.
+Реализация роутов для планирования заказов кухни с помощью Flask, marshmallow.
 В файле ch02/kitchen/oas.yaml описаны схемы для планирования заказа ScheduleOrderSchema, 
 для предоставления сведений о запланированном заказе - GetScheduledOrderSchema,
 и представление о товаре в заказе OrderItemSchema.

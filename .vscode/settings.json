@@ -58,6 +58,32 @@
     "source.organizeImports": "explicit",
     "source.fixAll": "explicit"
   },
+  // 6. Настройка цветов
+  "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": "string.quoted.docstring.multi.python", 
+                "settings": {
+                    "foreground": "#f6efcc"
+                }
+            },
+            {
+            "scope": "punctuation.definition.string.begin.python",
+            "settings": {
+                "foreground": "#f6efcc" // Цвет открывающих кавычек (""")
+            }
+            },
+            {
+                "scope": "punctuation.definition.string.end.python",
+                "settings": {
+                    "foreground": "#f6efcc" // Цвет закрывающих кавычек (""")
+                }
+            },
+            
+
+
+        ]
+    },
 
   // ========== ОСТАЛЬНЫЕ НАСТРОЙКИ ==========
 

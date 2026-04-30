@@ -2,6 +2,10 @@ from marshmallow import Schema, fields, validate, EXCLUDE
 
 
 class OrderItemSchema(Schema):
+    """
+    Схема для отображения данных об одном товаре.
+    Имеет вид: название товара, разме, количество
+    """
     # Meta для запретанеизвестных свойств
     class Meta:
         unknown = EXCLUDE
@@ -17,13 +21,21 @@ class OrderItemSchema(Schema):
         validate=validate.Range(1, min_inclusive=True), required=True
     )
 
+
 class SheduleOrderSchema(Schema):
+    """
+    Список из товаров OrderItemSchema с описаниями (кофе, булочка)
+    """
     class Meta:
         unknown = EXCLUDE
     # Отображение списка товаров, тк в заказе может быть несколько позиций (кофе, круассан)
-    order = fields.List(fields.Nested(OrderItemSchema, required=True))
+    order = fields.List(fields.Nested(OrderItemSchema, required=True), required=True)
+
 
 class GetSheduleOrderShema(SheduleOrderSchema):
+    """
+    Список из товаров SheduleOrderSchema со статусом заказа
+    """
     id = fields.UUID(required=True)
     scheduled = fields.DateTime(required=True)
     status = fields.String(
@@ -32,7 +44,11 @@ class GetSheduleOrderShema(SheduleOrderSchema):
             ["pending", "progress", "cancelled", "finished"]
             ))
     
+
 class GetSheduledOrdersSchema(Schema):
+    """
+    Список из всех заказов
+    """
     class Meta:
         unknown = EXCLUDE
         
@@ -40,7 +56,11 @@ class GetSheduledOrdersSchema(Schema):
         fields.Nested(GetSheduleOrderShema), required=True
     )
 
+
 class SheduleStatusSchema(Schema):
+    """
+    Статусы заказа
+    """
     class Meta:
         unknown = EXCLUDE
 
@@ -51,8 +71,11 @@ class SheduleStatusSchema(Schema):
         )
     )
 
+
 class GetKitchenScheduleParameters(Schema):
-    """Добавление параметров запроса"""
+    """
+    Добавление параметров запроса
+    """
     class Meta:
         unknown = EXCLUDE
 
