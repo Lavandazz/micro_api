@@ -37,7 +37,7 @@
 
   // 2. Показывать предложения даже без нажатия Ctrl+Space
   "editor.quickSuggestions": {
-    "other": true,
+    "other": "inline", // было true
     "comments": false,
     "strings": true
   },
@@ -47,7 +47,7 @@
 
   // 3. Подсветка ошибок на лету (как в PyCharm)
   "python.analysis.diagnosticMode": "openFilesOnly", // Было "openFilesOnly", теперь проверяет весь проект
-  "python.analysis.typeCheckingMode": "off", // Было "off", теперь basic проверка типов
+  "python.analysis.typeCheckingMode": "basic", // Было "off", теперь basic проверка типов
 
   // 4. Показывать документацию при наведении
   "editor.hover.enabled": "on",
