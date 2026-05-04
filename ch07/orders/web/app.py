@@ -5,7 +5,7 @@ uvicorn orders.web.app:app --reload
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
+from . api.api import router
 
 app = FastAPI(debug=True)
 
@@ -13,7 +13,7 @@ app = FastAPI(debug=True)
 # app = FastAPI(debug=True, openapi_url="/openapi/orders.json", docs_url="/docs/orders")
 
 # Чтение yaml файла
-# oas_doc = yaml.safe_load(
+# oas_doc = yaml.safe_load(ф
 #     API_YAML.read_text(encoding="utf-8") 
 # )
 
@@ -26,4 +26,4 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# from ch07.orders.api import api
+app.include_router(router=router)

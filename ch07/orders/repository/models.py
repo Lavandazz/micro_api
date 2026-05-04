@@ -8,6 +8,7 @@
 alembic downgrade base - откат к пустой базе
 alembic downgrade 123abc456 - откат до определенной миграции
 alembic history - Просмотр истории миграций
+sqlite3 orders.db ".tables" - проверка структуры таблицы
 
 """
 

@@ -15,8 +15,9 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-path_env = Path.cwd() / ".env"
+path_env = Path.cwd() / ".env" # Получаем env из папки ch07
 load_dotenv(path_env)
+
 
 
 class UnitOfWork:

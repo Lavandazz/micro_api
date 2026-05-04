@@ -2,8 +2,8 @@
 Реализация паттерна Репозиторий
 """
 
-from orders.orders_service.orders import Order
-from orders.repository.models import OrderModel, OrderItemModel
+from ch07.orders.orders_service.orders import Order
+from ch07.orders.repository.models import OrderModel, OrderItemModel
 
 from abc import ABC, abstractmethod
 
@@ -56,7 +56,9 @@ class SqlAlchemyOrdersRepository(AbstractOrdersRepository):
         return self.session.query(OrderModel).filter(OrderModel.id == str(id_)).first()
     
     def get(self, id_):
+        """Получение всех заказов"""
         order = self._get(id_)
+        print("SqlAlchemyOrdersRepository - order", order)
         if order is not None:
             return Order(**order.dict())
 
