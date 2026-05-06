@@ -7,25 +7,20 @@ with UnitOfWork as uow:
     ...
     Дальнейшая работа с заказами
     uow.commit() - сохранение заказа
+
+Используется в DI (dependencies.py)
 """
-import os
-from pathlib import Path
-from dotenv import load_dotenv
-
-from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
-path_env = Path.cwd() / ".env" # Получаем env из папки ch07
-load_dotenv(path_env)
-
 
 
 class UnitOfWork:
-    def __init__(self):
+    def __init__(self, session_maker):
         """Инициация подключения к бд"""
-        self.session_maker = sessionmaker(bind=create_engine(f"sqlite:///{os.getenv("db")}.db"))
+        # self.session_maker = sessionmaker(bind=create_engine(f"sqlite:///{os.getenv("db")}.db"))
+        self.session_maker: sessionmaker = session_maker # Передаем готовый sessionmaker
 
     def __enter__(self):
+        """Открытие новой сесси в блоке with"""
         self.session = self.session_maker() # Открытие нового сеанса работы с бд
         return self
     
@@ -33,6 +28,9 @@ class UnitOfWork:
         if exc_type is not None: # Проверка, есть ли исключения, если есть, то откатываем изменения и закрываем соединение.
             self.rollback()
             self.session.close()
+        else:
+            self.session.commit()
+            
         self.session.close()
     
 
@@ -43,4 +41,5 @@ class UnitOfWork:
         """Откат транзакции"""
         self.session.rollback()
 
-        
+    def close(self):
+        self.__exit__(None, None, None)

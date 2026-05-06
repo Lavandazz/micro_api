@@ -2,6 +2,9 @@
 Реализация паттерна Репозиторий
 """
 
+from datetime import datetime
+from uuid import uuid4
+
 from ch07.orders.orders_service.orders import Order
 from ch07.orders.repository.models import OrderModel, OrderItemModel
 
@@ -42,15 +45,37 @@ class SqlAlchemyOrdersRepository(AbstractOrdersRepository):
     def add(self, items):
         """
         Создание заказа в бд.
-        items — список словарей с товарами (product, size, quantity)
+        items —  OrderItemSchema(product='coffee', size=<Size.big: 'big'>, quantity=1)
+        order_model - объект модели бд OrderModel, который будет сохранен в бд. Он создается на основе данных из items, а также генерируется id и created.
+        records - список объектов модели бд OrderItemModel, которые будут сохранены в бд
         """
-        records = [OrderItemModel(**item) for item in items] # создаем запись для каждого элемента заказа
+        print("Получил items", items)
 
-        for r in records: 
-            self.session.add(r)
-        # self.session.add(record) # Добавляем запись в объекст session
+        order_model = OrderModel(
+            id=str(uuid4()),
+            status="created",
+            created=datetime.now(),      # или datetime.utcnow()
+            schedule_id=None,
+            delivery_id=None,
+        )
 
-        return Order(**records.dict(), order=records) # Возвращаем экземпляр класса Order
+        records = [
+            OrderItemModel(
+                id=str(uuid4()),
+                order_id=order_model.id,
+                product=item.product,
+                size=str(item.size.value),   # должно быть строкой,  i
+                                            # item.size.value - это значение перечисления, например "big", 
+                                            # а не объект перечисления Size.big
+                quantity=item.quantity,
+            )
+            for item in items
+        ]
+      
+        for record in records:
+            self.session.add(record) # Добавляем запись в объекст session
+
+        return order_model
     
     def _get(self, id_):
         return self.session.query(OrderModel).filter(OrderModel.id == str(id_)).first()
