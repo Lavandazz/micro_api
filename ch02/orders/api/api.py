@@ -6,27 +6,52 @@ from datetime import datetime
 from uuid import UUID, uuid4
 from typing import Optional
 
-from fastapi import HTTPException
+from fastapi import HTTPException, APIRouter
 from starlette.responses import Response
 from starlette import status
 
-from ch02.orders.app import app
 from ch02.orders.api.schemas import CreateOrderSchema, GetOrdersSchema, GetOrderSchema
 
+router = APIRouter()
 
-ORDERS = []
-order = {
-    'id': 'ff0f1355-e821-4178-9567-550dec27a373',
-    'status': 'delivered',
-    'created': datetime.now(),
-    'order': {
-        'product': 'capuccino',
-        'size': 'medium',
-        'quantity': 1,
+ORDERS = [
+    {
+        "id": "9bf7e21e-7f59-4cc9-8146-659a6c474769",
+        "created": "2026-05-06T15:00:17.855750",
+        "status": "created",
+        "order": [
+            {
+            "product": "coffee",
+            "size": "small",
+            "quantity": 1
+            }
+        ]
+    },
+    {
+        'id': 'ff0f1355-e821-4178-9567-550dec27a373',
+        'status': 'delivered',
+        'created': "2026-04-06T15:00:13.855750",
+        'order': [{
+            'product': 'capuccino',
+            'size': 'medium',
+            'quantity': 1,
+        }]
     }
-}
+]
 
-@app.get("/orders", response_model=GetOrdersSchema)
+
+# order = {
+#     'id': 'ff0f1355-e821-4178-9567-550dec27a373',
+#     'status': 'delivered',
+#     'created': datetime.now(),
+#     'order': {
+#         'product': 'capuccino',
+#         'size': 'medium',
+#         'quantity': 1,
+#     }
+# }
+
+@router.get("/orders", response_model=GetOrdersSchema)
 def get_orders(cancelled: Optional[bool]=None,
                limit: Optional[int]=None):
     """
@@ -56,7 +81,7 @@ def get_orders(cancelled: Optional[bool]=None,
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Список заказов пуст')
 
 
-@app.post(
+@router.post(
     "/orders", response_model=GetOrderSchema,
     status_code=status.HTTP_201_CREATED
 )
@@ -69,7 +94,7 @@ def create_order(order_details: CreateOrderSchema):
     return order
 
 
-@app.get(
+@router.get(
     "/orders/{order_id}", response_model=GetOrderSchema,
     status_code=status.HTTP_200_OK
 )
@@ -80,7 +105,7 @@ def get_order(order_id: UUID):
     raise HTTPException(status_code=404, detail="Order not found")
 
 
-@app.put(
+@router.put(
     "/orders/{order_id}",
     response_model=GetOrderSchema,
     status_code=status.HTTP_200_OK
@@ -94,7 +119,7 @@ def update_order(order_id: UUID, order_details: CreateOrderSchema):
     raise HTTPException(status_code=404, detail="Order not found")
 
 
-@app.delete("/orders/{order_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/orders/{order_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_order(order_id: UUID):
     for index, order in enumerate(ORDERS):
         if order['id'] == order_id:
@@ -103,7 +128,7 @@ def delete_order(order_id: UUID):
     raise HTTPException(status_code=404, detail="Order not found")
 
 
-@app.post("/orders/{order_id}/cancel")
+@router.post("/orders/{order_id}/cancel")
 def cancel_order(order_id: UUID):
     for order in ORDERS:
         if order['id'] == order_id:
@@ -112,7 +137,7 @@ def cancel_order(order_id: UUID):
     raise HTTPException(status_code=404, detail="Order not found")
 
 
-@app.post("/orders/{order_id}/pay")
+@router.post("/orders/{order_id}/pay")
 def pay_order(order_id: UUID):
     for order in ORDERS:
         if order['id'] == order_id:

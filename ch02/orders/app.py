@@ -6,6 +6,7 @@ import yaml
 # from ch02.common import API_YAML
 from fastapi.middleware.cors import CORSMiddleware
 
+from . api.api import router
 
 app = FastAPI(debug=True)
 
@@ -26,4 +27,4 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from ch02.orders.api import api
+app.include_router(router=router)

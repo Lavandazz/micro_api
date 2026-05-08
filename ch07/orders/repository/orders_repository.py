@@ -59,6 +59,8 @@ class SqlAlchemyOrdersRepository(AbstractOrdersRepository):
             delivery_id=None,
         )
 
+        self.session.add(order_model) # сохранение данных в таблицу order
+        
         records = [
             OrderItemModel(
                 id=str(uuid4()),
@@ -87,11 +89,13 @@ class SqlAlchemyOrdersRepository(AbstractOrdersRepository):
         if order is not None:
             return Order(**order.dict())
 
-    def list_orders(self, limit=None, **filters):
+    def get_orders(self, limit=None, **filters):
         """
         Получение саиска заказов
         """
         query = self.session.query(OrderModel)
+        print("Получил query%", query)
+
         if "cancelled" in filters:
             cancelled = filters.pop("cancelled")
             if cancelled:
@@ -100,6 +104,7 @@ class SqlAlchemyOrdersRepository(AbstractOrdersRepository):
                 query = query.filter(OrderModel.status != "cancelled")
 
         records = query.filter_by(**filters).limit(limit).all()
+        print("Получил records", records)
         return [Order(**record.dict()) for record in records]
     
     def update(self, id_, **payload):

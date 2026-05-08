@@ -31,7 +31,7 @@ class OrderService:
     def list_orders(self, **filters):
         """Запись фильтров"""
         limit = filters.pop("limit", None)
-        return self.orders_repository.list_orders(limit, **filters)
+        return self.orders_repository.get_orders(limit, **filters)
 
     def pay_order(self, order_id):
         order = self.orders_repository.get(order_id)

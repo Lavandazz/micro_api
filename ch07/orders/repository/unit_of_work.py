@@ -42,4 +42,4 @@ class UnitOfWork:
         self.session.rollback()
 
     def close(self):
-        self.__exit__(None, None, None)
+        pass
